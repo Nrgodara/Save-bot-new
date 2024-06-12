@@ -311,8 +311,8 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                    #   '@demon_0214': '@Mr_Mahiji',
                    #   'MR Joker': '',
                  #   }
-                    for old_word, new_word in replacements.items():
-                      caption = caption.replace(old_word, new_word)
+                   # for old_word, new_word in replacements.items():
+                     # caption = caption.replace(old_word, new_word)
 
                 #  caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
                   logger.info(f"Sending document: {path} with caption: {caption}")
