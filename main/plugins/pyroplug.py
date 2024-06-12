@@ -231,6 +231,7 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                 replacements = {
                   'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
                   '@demon_0214': '@Mr_Mahiji',
+                  'MR Joker': '',
                 }
                 for old_word, new_word in replacements.items():
                   caption = caption.replace(old_word, new_word)
@@ -299,26 +300,27 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                     original_extension = str(file).split(".")[-1]
                     new_filename = f'{prefix}{file_n}.{original_extension}'
                   path = os.path.join(base_directory, new_filename)
+                  logger.debug(f"Renaming file from {file} to {path}")
                   os.rename(file, path)
                   
                   file = path
                   thumb_path = "thumb.jpg"
+                  caption = str(file)
+                  if msg.caption is not None:
+                    caption = msg.caption
+                    replacements = {
+                      'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
+                      '@demon_0214': '@Mr_Mahiji',
+                      'MR Joker': '',
+                    }
+                    for old_word, new_word in replacements.items():
+                      caption = caption.replace(old_word, new_word)
+
+                  caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
+                  logger.info(f"Sending document: {path} with caption: {caption}")
+                  await send_document_with_chat_id(client, sender, path, caption, thumb_path, upm)
                   
-                
-                
-                caption = str(file)
-                if msg.caption is not None:
-                  caption = msg.caption 
-                  replacements = {
-                    'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
-                    '@demon_0214': '@Mr_Mahiji',
-                  }
-                  for old_word, new_word in replacements.items():
-                    caption = caption.replace(old_word, new_word)
-                    caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
-                    
-                await send_document_with_chat_id(client, sender, path, caption, thumb_path, upm)
-       
+                  
             os.remove(file)
             await upm.delete()
             return None
