@@ -424,10 +424,17 @@ async def ggn_new(userbot, client, sender, edit_id, msg_link, i, file_n):
             path = file
             await edit.delete()
             upm = await client.send_message(sender, '__Preparing to Upload!__')
-            
+           
             caption = str(file)
             if msg.caption is not None:
                 caption = msg.caption
+                replacements = {
+                  'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
+                  'MR Joker': '',
+                  '@demon_0214': '@Mr_Mahiji',
+                }
+                for old_word, new_word in replacements.items():
+                  caption = caption.replace(old_word, new_word)
             if str(file).split(".")[-1] in ['mkv', 'mp4', 'webm', 'mpe4', 'mpeg', 'ts', 'avi', 'flv', 'org']:
                 if str(file).split(".")[-1] in ['webm', 'mkv', 'mpe4', 'mpeg', 'ts', 'avi', 'flv', 'org']:
                     path = str(file).split(".")[0] + ".mp4"
@@ -456,7 +463,7 @@ async def ggn_new(userbot, client, sender, edit_id, msg_link, i, file_n):
                     logging.info(e)
                     thumb_path = None
                 
-                caption = f"{msg.caption}\n\n__Unrestricted by **[Team SPY](https://t.me/dev_gagan)**__" if msg.caption else "__Unrestricted by **[Team SPY](https://t.me/dev_gagan)**__"
+                caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
                 await send_video_with_chat_id(client, sender, path, caption, duration, hi, wi, thumb_path, upm)
             elif str(file).split(".")[-1] in ['jpg', 'jpeg', 'png', 'webp']:
                 if file_n != '':
@@ -477,6 +484,7 @@ async def ggn_new(userbot, client, sender, edit_id, msg_link, i, file_n):
             else:
                 if file_n != '':
                     #path = ''
+                    
                     if '.' in file_n:
                         path = f'/app/downloads/{file_n}'
                     else:
@@ -486,7 +494,21 @@ async def ggn_new(userbot, client, sender, edit_id, msg_link, i, file_n):
                     file = path
                 thumb_path = "thumb.jpg"
                 
-                caption = f"{msg.caption}\n\n__Unrestricted by **[Team SPY](https://t.me/dev_gagan)**__" if msg.caption else "__Unrestricted by **[Team SPY](https://t.me/dev_gagan)**__"
+                caption = str(file)
+                if msg.caption is not None:
+                  caption = msg.caption
+                  replacements = {
+                    'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
+                    'MR Joker': '',
+                    '@demon_0214': '@Mr_Mahiji',
+                  }
+                  for old_word, new_word in replacements.items():
+                    caption = caption.replace(old_word, new_word)
+                    caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
+                    
+                    
+                  
+              
                 await send_document_with_chat_id(client, sender, path, caption, thumb_path, upm)
             os.remove(file)
             await upm.delete()
