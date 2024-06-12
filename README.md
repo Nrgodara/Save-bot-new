@@ -1,8 +1,8 @@
 <h1 align="center">
-  <b>Save restricted Content Bot by <a href="https://devgagan.in"> devgagan.in </a>
+  <b>Save restricted Content Bot by <a href="https://t.me/mr_mahiji "> 𝑴𝑨𝑯𝑰® </a>
 </h1> 
 
-Contact: [Telegram](https://t.me/devggn)
+Contact: [Telegram](https://t.me/mr_mahiji)
 
 ## Try Live Bot
 Bot link -https://t.me/advance_content_saver_bot
@@ -34,7 +34,7 @@ API: [Telegram.org](https://my.telegram.org/auth)
 
 PYROGRAM SESSION: Search for it ... Make sure the source be trusted otherwise it will lead to accound delete or ban
 
-# How to get vars - [TEAM SPY](https://t.me/devggn)
+# How to get vars - [MAHI Botz](https://t.me/mr_mahiji)
 
 BOT TOKEN: @Botfather on telegram
 
@@ -42,7 +42,7 @@ AUTH: Go to @missrose_bot, start and send /info to get your id
 
 FORCESUB: Before starting building bots create a public channel and get the username withou '@'
 
-# Deploying Guide - [TEAM SPY](https://t.me/devggn)
+# Deploying Guide - [MAHI Botz](https://t.me/mr_mahiji)
 
 ## Deploy on `VPS`
 
@@ -83,7 +83,7 @@ python3 -m main
 - Star the repo, and fork it in desktop mode
 - Go to settings of your forked repo
 - Rename your repo by any other name
-- Click on  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+- Click on  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Nrgodara/Save-bot-new/tree/Replace-Caption)
  
 » Method - 2:
 - Star the repo, and fork it in desktop mode
