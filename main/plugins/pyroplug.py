@@ -215,7 +215,7 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                 progress=progress_for_pyrogram,
                 progress_args=(
                     client,
-                    "**__Unrestricting__: __[Team SPY](https://t.me/dev_gagan)__**\n ",
+                    "**__Downloading__: __Wait...__**\n ",
                     edit,
                     time.time()
                 )
@@ -232,8 +232,9 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                   (r'जय श्री राम 🚩🚩', '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚'),
                   (r'@demon_0214', '@Mr_Mahiji'),
                 ]
-              for old_word, new_word in replacements:
-                caption = re.sub(old_word, new_word, caption)
+                for old_word, new_word in replacements:
+                  caption = re.sub(old_word, new_word, caption)
+                
                 
           
             if str(file).split(".")[-1] in ['mkv', 'mp4', 'webm', 'mpe4', 'mpeg', 'ts', 'avi', 'flv', 'org']:
