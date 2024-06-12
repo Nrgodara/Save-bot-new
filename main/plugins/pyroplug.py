@@ -74,7 +74,7 @@ async def send_video_with_chat_id(client, sender, path, caption, duration, hi, w
             progress=progress_for_pyrogram,
             progress_args=(
                 client,
-                '**__Uploading: [Team SPY](https://t.me/dev_gagan)__**\n ',
+                '**__Uploading__**.... \n\n**Please Wait** ',
                 upm,
                 time.time()
             )
@@ -97,7 +97,7 @@ async def send_document_with_chat_id(client, sender, path, caption, thumb_path, 
             progress=progress_for_pyrogram,
             progress_args=(
                 client,
-                '**__Uploading:__**\n**__Bot made by [Team SPY](https://t.me/dev_gagan)__**',
+                '**__Uploading...__**\n\n**__Please wait__**',
                 upm,
                 time.time()
             )
@@ -284,24 +284,41 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                     file = path
 
                 
-                caption = f"{msg.caption}\n\n__Unrestricted by **[Team SPY](https://t.me/dev_gagan)**__" if msg.caption else "__Unrestricted by **[Team SPY](https://t.me/dev_gagan)**__"
+                caption = f"{msg.caption}" if msg.caption else "📸"
                 await upm.edit("__Uploading photo...__")
 
                 await bot.send_file(sender, path, caption=caption)
             else:
                 if file_n != '':
-                    #path = ''
-                    if '.' in file_n:
-                        path = f'/app/downloads/{file_n}'
-                    else:
-                        path = f'/app/downloads/{file_n}.' + str(file).split(".")[-1]
-
-                    os.rename(file, path)
-                    file = path
-                thumb_path = "thumb.jpg"
+                  # Define the base directory for downloads
+                  base_directory = '/app/downloads/'
+                  prefix = '[𝑴𝑨𝑯𝑰®]'
+                  if '.' in file_n:
+                    new_filename = f'{prefix}{file_n}'
+                  else:
+                    original_extension = str(file).split(".")[-1]
+                    new_filename = f'{prefix}{file_n}.{original_extension}'
+                  path = os.path.join(base_directory, new_filename)
+                  os.rename(file, path)
+                  
+                  file = path
+                  thumb_path = "thumb.jpg"
+                  
                 
-                caption = f"{msg.caption}\n\n__Unrestricted by **[Team SPY](https://t.me/dev_gagan)**__" if msg.caption else "__Unrestricted by **[Team SPY](https://t.me/dev_gagan)**__"
+                
+                caption = str(file)
+                if msg.caption is not None:
+                  caption = msg.caption 
+                  replacements = {
+                    'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
+                    '@demon_0214': '@Mr_Mahiji',
+                  }
+                  for old_word, new_word in replacements.items():
+                    caption = caption.replace(old_word, new_word)
+                    caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
+                    
                 await send_document_with_chat_id(client, sender, path, caption, thumb_path, upm)
+       
             os.remove(file)
             await upm.delete()
             return None
