@@ -1,6 +1,6 @@
 # Join t.me/dev_gagan
 
-import asyncio, time, os
+import asyncio, time, os, re
 
 from pyrogram.enums import ParseMode , MessageMediaType
 
@@ -224,7 +224,7 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
             path = file
             await edit.delete()
             upm = await client.send_message(sender, '__Preparing to Upload!__')
-            
+           
             caption = str(file)
             if msg.caption is not None:
                 caption = msg.caption
@@ -266,7 +266,11 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                     thumb_path = None
                 
                 caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot**"
+              try:
+                
                 await send_video_with_chat_id(client, sender, path, caption, duration, hi, wi, thumb_path, upm)
+            except Exception as e:
+              logging.error(f"Error sending video {file}: {e}")
             elif str(file).split(".")[-1] in ['jpg', 'jpeg', 'png', 'webp']:
                 if file_n != '':
                     #path = ''
