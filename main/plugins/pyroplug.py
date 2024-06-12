@@ -314,8 +314,8 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                    # for old_word, new_word in replacements.items():
                      # caption = caption.replace(old_word, new_word)
 
-                #  caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
-                  logger.info(f"Sending document: {path} with caption: {caption}")
+                  #caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
+                 # logger.info(f"Sending document: {path} with caption: {caption}")
                   await send_document_with_chat_id(client, sender, path, caption, thumb_path, upm)
                   
                   
