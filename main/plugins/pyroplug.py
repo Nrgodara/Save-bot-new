@@ -303,7 +303,7 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                     os.rename(file, path)
                     file = path
                 thumb_path = "thumb.jpg"
-                  caption = str(file)
+                    caption = str(file)
                   if msg.caption is not None:
                     caption = msg.caption
                     replacements = {
