@@ -104,6 +104,8 @@ async def send_document_with_chat_id(client, sender, path, caption, thumb_path, 
         )
     except Exception as e:
         error_message = f"Error occurred while sending document to chat ID {chat_id}: {str(e)}"
+        
+        logging.info(e)
         await client.send_message(sender, error_message)
         await client.send_message(sender, f"Make Bot admin in your Channel - {chat_id} and restart the process after /cancel")
 
@@ -291,32 +293,28 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
                 await bot.send_file(sender, path, caption=caption)
             else:
                 if file_n != '':
-                  # Define the base directory for downloads
-                  base_directory = '/app/downloads/'
-                  prefix = '[𝑴𝑨𝑯𝑰®]'
-                  if '.' in file_n:
-                    new_filename = f'{prefix}{file_n}'
-                  else:
-                    original_extension = str(file).split(".")[-1]
-                    new_filename = f'{prefix}{file_n}.{original_extension}'
-                  path = os.path.join(base_directory, new_filename)
-                  logger.debug(f"Renaming file from {file} to {path}")
-                  os.rename(file, path)
-                  
-                  file = path
-                  thumb_path = "thumb.jpg"
-                  caption = str(file)
-                  if msg.caption is not None:
-                    caption = msg.caption
-                    replacements = {
-                      'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
-                      '@demon_0214': '@Mr_Mahiji',
-                      'MR Joker': '',
-                    }
+                    #path = ''
+                    
+                    if '.' in file_n:
+                        path = f'/app/downloads/{file_n}'
+                    else:
+                        path = f'/app/downloads/{file_n}.' + str(file).split(".")[-1]
+
+                    os.rename(file, path)
+                    file = path
+                thumb_path = "thumb.jpg"
+                  #caption = str(file)
+                 # if msg.caption is not None:
+                  #  caption = msg.caption
+                   # replacements = {
+                     # 'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
+                   #   '@demon_0214': '@Mr_Mahiji',
+                   #   'MR Joker': '',
+                 #   }
                     for old_word, new_word in replacements.items():
                       caption = caption.replace(old_word, new_word)
 
-                  caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
+                #  caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
                   logger.info(f"Sending document: {path} with caption: {caption}")
                   await send_document_with_chat_id(client, sender, path, caption, thumb_path, upm)
                   
@@ -324,9 +322,13 @@ async def get_msg(userbot, client, sender, edit_id, msg_link, i, file_n):
             os.remove(file)
             await upm.delete()
             return None
-        except (ChannelBanned, ChannelInvalid, ChannelPrivate, ChatIdInvalid, ChatInvalid):
-            await client.edit_message_text(sender, edit_id, "Bot is not in that channel/ group \n send the invite link so that bot can join the channel ")
-            return None
+        except Exception as e:
+          await client.edit_message_text(sender, edit_id, " Error occurred: (e)\n\ne\n\nstr(e)")
+        logger.error("Error processing file %s: %s", file, str(e), exc_info=True)
+        return None 
+      #  except (ChannelBanned, ChannelInvalid, ChannelPrivate, ChatIdInvalid, ChatInvalid):
+           # await client.edit_message_text(sender, edit_id, "Bot is not in that channel/ group \n send the invite link so that bot can join the channel ")
+            #return None
     else:
         edit = await client.edit_message_text(sender, edit_id, "Cloning.")
         chat =  msg_link.split("/")[-2]
@@ -417,7 +419,7 @@ async def ggn_new(userbot, client, sender, edit_id, msg_link, i, file_n):
                 progress=progress_for_pyrogram,
                 progress_args=(
                     client,
-                    "**__Unrestricting__: __[Team SPY](https://t.me/dev_gagan)__**\n ",
+                    "**__Okay__: __Please Wait...__**\n ",
                     edit,
                     time.time()
                 )
@@ -496,17 +498,17 @@ async def ggn_new(userbot, client, sender, edit_id, msg_link, i, file_n):
                     file = path
                 thumb_path = "thumb.jpg"
                 
-                caption = str(file)
-                if msg.caption is not None:
-                  caption = msg.caption
-                  replacements = {
-                    'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
-                    'MR Joker': '',
-                    '@demon_0214': '@Mr_Mahiji',
-                  }
-                  for old_word, new_word in replacements.items():
-                    caption = caption.replace(old_word, new_word)
-                    caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
+               # caption = str(file)
+                #if msg.caption is not None:
+                #  caption = msg.caption
+                #  replacements = {
+                  #  'जय श्री राम 🚩🚩': '𝐶𝑜𝑎𝑐ℎ𝑖𝑛𝑔 : 𝐾𝑎𝑙𝑎𝑚',
+                 #   'MR Joker': '',
+               #     '@demon_0214': '@Mr_Mahiji',
+              #    }
+              #    for old_word, new_word in replacements.items():
+               #     caption = caption.replace(old_word, new_word)
+             #       caption += "\n[𝔼𝕏ℙ𝔼ℂ𝕋 𝕋ℍ𝔼 𝕌ℕ𝔼𝕏ℙ𝔼ℂ𝕋𝔼𝔻 🫰❤️‍🔥](https://t.me/+TQfNhTbrVC04NWNl)\n•┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈•\n       **@Free_Batches_bot** "
                     
                     
                   
