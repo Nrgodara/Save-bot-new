@@ -57,16 +57,26 @@ def add_watermark(video_path, watermark_path, output_path, position="topright", 
     
     position_str = positions.get(position, "main_w-overlay_w-10:10")  # Default to topright
     
+    # Calculate the alpha channel value based on opacity
+    alpha = f"format=rgba,colorchannelmixer=aa={opacity}" if opacity < 1.0 else ""
+    
     command = [
         "ffmpeg",
         "-i", video_path,
         "-i", watermark_path,
-        "-filter_complex", f"[1][0]scale2ref=w=iw:h=ih[wm][base];[base][wm]overlay={position_str}:format=auto:shortest=1,format=yuv420p,blend=all_mode='overlay':all_opacity={opacity}",
+        "-filter_complex", f"[1]scale2ref=w=iw:h=ih[wm][base];[wm]format=rgba,{alpha}[wm];[base][wm]overlay={position_str}:format=auto:shortest=1",
         "-codec:a", "copy",
         output_path
     ]
-    
-    subprocess.run(command, check=True)
+
+    try:
+        # Run the command and capture the output
+        result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        print(result.stdout)
+    except subprocess.CalledProcessError as e:
+        # Print the detailed ffmpeg error message
+        print("FFmpeg error output:", e.stderr)
+        raise
 
 
 
