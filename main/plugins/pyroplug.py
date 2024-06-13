@@ -48,7 +48,7 @@ def add_watermark(video_path, watermark_path, output_path, position="topright"):
         "ffmpeg",
         "-i", video_path,
         "-i", watermark_path,
-        "-filter_complex", f"overlay={position_str}",
+        "-filter_complex", f"[1][0]scale2ref=w=iw:h=ih[wm][base];[base][wm]overlay={position_str}:format=auto:shortest=1,format=yuv420p,blend=all_mode='overlay':all_opacity={opacity}",
         "-codec:a", "copy",
         output_path
     ]
@@ -94,11 +94,13 @@ async def set_chat_id(event):
 async def send_video_with_chat_id(client, sender, path, caption, duration, hi, wi, thumb_path, upm):
     # Define paths
     watermark_path = "https://graph.org/file/274899ec6933d4992bccb.jpg"  # Path to your watermark image
-    watermarked_video_path = path.replace(".mp4", "_watermarked.mp4")
+    watermarked_video_path = path.replace(".mp4", "_MAHI®.mp4")
+    position = "bottomright"
+    opacity = 0.1
 
     # Add watermark to the video
     try:
-        add_watermark(path, watermark_path, watermarked_video_path)
+        add_watermark(path, watermark_path, watermarked_video_path, position, opacity)
         path = watermarked_video_path  # Update path to the watermarked video
     except Exception as e:
         error_message = f"Error occurred while adding watermark: {str(e)}"
