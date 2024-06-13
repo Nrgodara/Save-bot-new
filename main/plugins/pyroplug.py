@@ -1,6 +1,7 @@
 # Join t.me/dev_gagan
 
 import asyncio, time, os
+import aiohttp
 
 from pyrogram.enums import ParseMode , MessageMediaType
 
@@ -24,9 +25,20 @@ logging.getLogger("pyrogram").setLevel(logging.INFO)
 logging.getLogger("telethon").setLevel(logging.INFO)
 
 user_chat_ids = {}
+async def download_image(url, local_path):
+    """
+    Download an image from the given URL to the specified local path.
+    """
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                with open(local_path, 'wb') as f:
+                    f.write(await response.read())
+            else:
+                raise Exception(f"Failed to download image from {url}. Status code: {response.status}")
 
 
-def add_watermark(video_path, watermark_path, output_path, position="topright"):
+def add_watermark(video_path, watermark_path, output_path, position="topright", opacity=1.0):
     """
     Add a watermark to a video using ffmpeg.
     
@@ -34,6 +46,7 @@ def add_watermark(video_path, watermark_path, output_path, position="topright"):
     :param watermark_path: Path to the watermark image file.
     :param output_path: Path to the output video file with watermark.
     :param position: Position of the watermark ('topright', 'topleft', 'bottomright', 'bottomleft').
+    :param opacity: Opacity level of the watermark (0.0 to 1.0).
     """
     positions = {
         "topright": "main_w-overlay_w-10:10",
@@ -93,10 +106,19 @@ async def set_chat_id(event):
       
 async def send_video_with_chat_id(client, sender, path, caption, duration, hi, wi, thumb_path, upm):
     # Define paths
-    watermark_path = "https://graph.org/file/274899ec6933d4992bccb.jpg"  # Path to your watermark image
+    watermark_url = "https://graph.org/file/274899ec6933d4992bccb.jpg"  # URL to your watermark image
+    watermark_path = "watermark.jpg"  # Temporary local path for the downloaded watermark image
     watermarked_video_path = path.replace(".mp4", "_MAHI®.mp4")
     position = "bottomright"
     opacity = 0.1
+
+    # Download watermark image
+    try:
+        await download_image(watermark_url, watermark_path)
+    except Exception as e:
+        error_message = f"Error occurred while downloading watermark: {str(e)}"
+        await client.send_message(sender, error_message)
+        return
 
     # Add watermark to the video
     try:
@@ -106,7 +128,11 @@ async def send_video_with_chat_id(client, sender, path, caption, duration, hi, w
         error_message = f"Error occurred while adding watermark: {str(e)}"
         await client.send_message(sender, error_message)
         return
-    
+    finally:
+        # Clean up the watermark image file
+        if os.path.exists(watermark_path):
+            os.remove(watermark_path)
+
     # Get the user's set chat ID, if available; otherwise, use the original sender ID
     chat_id = user_chat_ids.get(sender, sender)
     try:
