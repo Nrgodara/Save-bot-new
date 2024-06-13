@@ -13,6 +13,7 @@ from pyrogram.errors import ChannelBanned, ChannelInvalid, ChannelPrivate, ChatI
 #from ethon.pyfunc import video_metadata
 from main.plugins.helpers import video_metadata
 from telethon import events
+import subprocess
 
 import logging
 
@@ -23,6 +24,38 @@ logging.getLogger("pyrogram").setLevel(logging.INFO)
 logging.getLogger("telethon").setLevel(logging.INFO)
 
 user_chat_ids = {}
+
+
+def add_watermark(video_path, watermark_path, output_path, position="topright"):
+    """
+    Add a watermark to a video using ffmpeg.
+    
+    :param video_path: Path to the input video file.
+    :param watermark_path: Path to the watermark image file.
+    :param output_path: Path to the output video file with watermark.
+    :param position: Position of the watermark ('topright', 'topleft', 'bottomright', 'bottomleft').
+    """
+    positions = {
+        "topright": "main_w-overlay_w-10:10",
+        "topleft": "10:10",
+        "bottomright": "main_w-overlay_w-10:main_h-overlay_h-10",
+        "bottomleft": "10:main_h-overlay_h-10"
+    }
+    
+    position_str = positions.get(position, "main_w-overlay_w-10:10")  # Default to topright
+    
+    command = [
+        "ffmpeg",
+        "-i", video_path,
+        "-i", watermark_path,
+        "-filter_complex", f"overlay={position_str}",
+        "-codec:a", "copy",
+        output_path
+    ]
+    
+    subprocess.run(command, check=True)
+
+
 
 def thumbnail(sender):
     return f'{sender}.jpg' if os.path.exists(f'{sender}.jpg') else f'thumb.jpg'
@@ -59,6 +92,19 @@ async def set_chat_id(event):
         await event.reply("Invalid chat ID!")
       
 async def send_video_with_chat_id(client, sender, path, caption, duration, hi, wi, thumb_path, upm):
+    # Define paths
+    watermark_path = "https://graph.org/file/274899ec6933d4992bccb.jpg"  # Path to your watermark image
+    watermarked_video_path = path.replace(".mp4", "_watermarked.mp4")
+
+    # Add watermark to the video
+    try:
+        add_watermark(path, watermark_path, watermarked_video_path)
+        path = watermarked_video_path  # Update path to the watermarked video
+    except Exception as e:
+        error_message = f"Error occurred while adding watermark: {str(e)}"
+        await client.send_message(sender, error_message)
+        return
+    
     # Get the user's set chat ID, if available; otherwise, use the original sender ID
     chat_id = user_chat_ids.get(sender, sender)
     try:
@@ -74,7 +120,7 @@ async def send_video_with_chat_id(client, sender, path, caption, duration, hi, w
             progress=progress_for_pyrogram,
             progress_args=(
                 client,
-                '**__Uploading: [Team SPY](https://t.me/dev_gagan)__**\n ',
+                '**__Uploading: Please Wait__**\n ',
                 upm,
                 time.time()
             )
@@ -83,6 +129,11 @@ async def send_video_with_chat_id(client, sender, path, caption, duration, hi, w
         error_message = f"Error occurred while sending video to chat ID {chat_id}: {str(e)}"
         await client.send_message(sender, error_message)
         await client.send_message(sender, f"Make Bot admin in your Channel - {chat_id} and restart the process after /cancel")
+    finally:
+        # Clean up the watermarked video file
+        if os.path.exists(watermarked_video_path):
+            os.remove(watermarked_video_path)
+
 
 
 async def send_document_with_chat_id(client, sender, path, caption, thumb_path, upm):
